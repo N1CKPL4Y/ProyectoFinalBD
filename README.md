@@ -1,6 +1,7 @@
-#Proyecto Final Base De Datos (Banco)
-##Integrantes: Nicolas Perez Droguett
-
+Proyecto Final Base De Datos (Banco)
+===================================
+Integrantes: Nicolas Perez Droguett
+-----------------------------------
 El proyecto consta de una aplicacion de escritorio para gestionar los datos de un usuario relacionado/vinculado con algun banco, dentro de las funciones que contiene el software podemos encontrar:
 - Un registro de nuevos usuarios.
 - Inicio de sesion con usuarios existentes.
