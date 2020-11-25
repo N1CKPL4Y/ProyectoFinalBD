@@ -12,6 +12,6 @@ El proyecto consta de una aplicacion de escritorio para gestionar los datos de u
 
 Modelo ER
 ---------
-![Modelo ER](SQL/modelo ER proyecto final BD.png)
+![Modelo ER](https://github.com/N1CKPL4Y/ProyectoFinalBD/blob/main/SQL/modelo%20ER%20proyecto%20final%20BD.png?raw=true)
 
 
