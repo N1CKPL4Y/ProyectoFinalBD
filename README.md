@@ -10,4 +10,8 @@ El proyecto consta de una aplicacion de escritorio para gestionar los datos de u
 - Emision de un registro del punto anterior(historial).
 - Un menu especial para los trabajadores(servicio al cliente).
 
+Modelo ER
+---------
+![Modelo ER](SQL/modelo ER proyecto final BD.png)
+
 
