@@ -44,9 +44,8 @@ public class DAO {
             oUsuario.setNombre(oConexion.oResultSet.getString(3));
             oUsuario.setApellido_P(oConexion.oResultSet.getString(4));
             oUsuario.setApellido_M(oConexion.oResultSet.getString(5));
-            oUsuario.setCorreo(oConexion.oResultSet.getString(6));
-            oUsuario.setClave(oConexion.oResultSet.getString(7));
-            oUsuario.setEstado(oConexion.oResultSet.getBoolean(9));
+            oUsuario.setClave(oConexion.oResultSet.getString(6));
+            oUsuario.setEstado(oConexion.oResultSet.getBoolean(7));
             return oUsuario;
         } else {
             return null;
@@ -91,8 +90,8 @@ public class DAO {
             oUsuario.setNombre(oConexion.oResultSet.getString(3));
             oUsuario.setApellido_P(oConexion.oResultSet.getString(4));
             oUsuario.setApellido_M(oConexion.oResultSet.getString(5));
-            oUsuario.setCorreo(oConexion.oResultSet.getString(6));
-            oUsuario.setClave(oConexion.oResultSet.getString(7));
+            oUsuario.setClave(oConexion.oResultSet.getString(6));
+            oUsuario.setEstado(oConexion.oResultSet.getBoolean(7));
             return oUsuario;
         }
         return null;
@@ -113,6 +112,25 @@ public class DAO {
         }
         return  motivo;
         
+    }
+    
+    public Usuario getUserRegisted(String ruser) throws SQLException {
+        sql = "SELECT * FROM usuario WHERE Rut='" + ruser + "'";
+        oConexion.oResultSet = oConexion.ejecutarSelect(sql);
+        Usuario oUsuario;
+        if (oConexion.oResultSet.next()) {
+            oUsuario = new Usuario();
+            oUsuario.setN_Cuenta(oConexion.oResultSet.getInt(1));
+            oUsuario.setRut(oConexion.oResultSet.getString(2));
+            oUsuario.setNombre(oConexion.oResultSet.getString(3));
+            oUsuario.setApellido_P(oConexion.oResultSet.getString(4));
+            oUsuario.setApellido_M(oConexion.oResultSet.getString(5));
+            oUsuario.setClave(oConexion.oResultSet.getString(6));
+            oUsuario.setEstado(oConexion.oResultSet.getBoolean(7));
+            return oUsuario;
+        }
+        return null;
+
     }
     
     public void eliminarTrabajador(String rutString) throws SQLException{
@@ -142,9 +160,11 @@ public class DAO {
         }
         return null;
     }
+    
+    
 
-    public void transferencia(int _n_cuenta_ori, int _n_cuenta_des, int _monto) throws SQLException {
-        sql = "CALL transferencia(" + _n_cuenta_ori + "," + _n_cuenta_des + "," + _monto + ")";
+    public void transferencia(int _n_cuenta_ori, int _n_cuenta_des, int _monto, int t_c_ori, String msg, int t_c_des) throws SQLException {
+        sql = "CALL transferencia_Bancaria(" + _n_cuenta_ori + "," + _n_cuenta_des + "," + _monto + ","+t_c_ori+",'"+msg+"',"+t_c_des+")";
         oConexion.ejecutar(sql);
     }
 

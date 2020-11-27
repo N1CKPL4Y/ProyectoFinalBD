@@ -6,15 +6,28 @@
 
 package app;
 
+import bd.DAO;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import model.Usuario;
+
 /**
  *
  * @author N1CK PL4Y
  */
 public class CambioDeClave extends javax.swing.JFrame {
 
-    /** Creates new form CambioDeClave */
-    public CambioDeClave() {
+    DAO oDao;
+    String volver;
+    public CambioDeClave(String rutString) {
+        volver = rutString;
         initComponents();
+    }
+
+    private CambioDeClave() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     /** This method is called from within the constructor to
@@ -46,6 +59,12 @@ public class CambioDeClave extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel2.setText("Clave Actual: ");
 
+        ClaveActual.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ClaveActualActionPerformed(evt);
+            }
+        });
+
         jLabel3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel3.setText("Nueva Clave:");
 
@@ -71,6 +90,11 @@ public class CambioDeClave extends javax.swing.JFrame {
         });
 
         btnContinuar.setText("Continuar");
+        btnContinuar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnContinuarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -142,10 +166,59 @@ public class CambioDeClave extends javax.swing.JFrame {
     }//GEN-LAST:event_ConfirmarClaveActionPerformed
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
-        M_principal principal = new M_principal();
+        M_principal principal = new M_principal(volver);
         principal.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_btnVolverActionPerformed
+
+    private void btnContinuarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnContinuarActionPerformed
+        try {
+            // TODO add your handling code here:
+            oDao = new DAO();
+            Usuario oUsuario = oDao.getUserRegisted(volver);
+            if (ClaveActual.getText().equalsIgnoreCase(oUsuario.getClave())) {
+                if (ClaveActual.getText().equalsIgnoreCase(ClaveNueva.getText()) && ClaveNueva.getText().equalsIgnoreCase(ConfirmarClave.getText())) {
+                    JOptionPane.showMessageDialog(rootPane, "La nueva clave no puede ser igual a la antigua");
+                    ClaveActual.setText("");
+                    ClaveNueva.setText("");
+                    ConfirmarClave.setText("");
+                    ClaveNueva.requestFocus();
+                } else if (ClaveNueva.getText().trim().isEmpty() && ConfirmarClave.getText().trim().isEmpty()) {
+                    JOptionPane.showMessageDialog(rootPane, "Los campos no pueden estar vacios");
+                    ClaveNueva.requestFocus();
+                } else if (ClaveNueva.getText().equalsIgnoreCase(ConfirmarClave.getText())) {
+                    cambiarClave(ConfirmarClave.getText(), volver);
+                } else {
+                    JOptionPane.showMessageDialog(rootPane, "Lac claves no coinciden");
+                    ClaveActual.setText("");
+                    ClaveNueva.setText("");
+                    ConfirmarClave.setText("");
+                    ClaveNueva.requestFocus();
+                }
+                /*if (txtC_Nueva.getText().equalsIgnoreCase(txtN_Confirmar.getText())) {
+                    cambiarClave(txtN_Confirmar.getText(), volver);
+                } else if (txtClaveActual.getText().equalsIgnoreCase(txtC_Nueva.getText())) {
+                    JOptionPane.showMessageDialog(rootPane, "La nueva clave no puede ser igual a la antigua");
+                } else {
+                    JOptionPane.showMessageDialog(rootPane, "Lac claves no coinciden");
+                }*/
+            } else if (ClaveActual.getText().trim().isEmpty()) {
+                JOptionPane.showMessageDialog(rootPane, "Error, campo vacio");
+                ClaveActual.requestFocus();
+            } else {
+                JOptionPane.showMessageDialog(rootPane, "Clave incorrecta");
+                ClaveActual.setText("");
+                ClaveActual.requestFocus();
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(CambioDeClave.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnContinuarActionPerformed
+
+    private void ClaveActualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ClaveActualActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ClaveActualActionPerformed
 
     /**
      * @param args the command line arguments
@@ -194,5 +267,27 @@ public class CambioDeClave extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
+    private void cambiarClave(String nclave, String rv) {
+        try {
+            oDao = new DAO();
+            Usuario oUsuario = oDao.getUserRegisted(rv);
+            if (oUsuario != null) {
+                oDao.cambiarClave(nclave, oUsuario.getN_Cuenta());
+                JOptionPane.showMessageDialog(rootPane, "Clave cambiada exitosamente,\n "
+                        + "se solicitara en su proximo inicio de sesiòn");
+                /*Correo oCorreo = new Correo();
+                oCorreo.enviarCorreo(oUsuario.getCorreo(), "Cambio de Clave Secreta",
+                        "Estimado/a " + oUsuario.getNombre() + ", su cambio de clave "
+                        + "secreta se ha realizado exitosamente, su nueva clave es: " + nclave);*/
+                ClaveNueva.setText("");
+                ConfirmarClave.setText("");
+                Login oLogin=new Login();
+                oLogin.setVisible(true);
+                this.dispose();
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(CambioDeClave.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
 }

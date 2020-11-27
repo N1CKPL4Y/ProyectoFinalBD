@@ -15,20 +15,18 @@ public class Usuario {
     private String nombre;
     private String apellido_P;
     private String apellido_M;
-    private String correo;
     private String clave;
     private Boolean estado;
 
     public Usuario() {
     }
 
-    public Usuario(int n_Cuenta, String rut, String nombre, String apellido_P, String apellido_M, String correo, String clave, Boolean estado) {
+    public Usuario(int n_Cuenta, String rut, String nombre, String apellido_P, String apellido_M, String clave, Boolean estado) {
         this.n_Cuenta = n_Cuenta;
         this.rut = rut;
         this.nombre = nombre;
         this.apellido_P = apellido_P;
         this.apellido_M = apellido_M;
-        this.correo = correo;
         this.clave = clave;
         this.estado = estado;
     }
@@ -73,14 +71,6 @@ public class Usuario {
         this.apellido_M = apellido_M;
     }
 
-    public String getCorreo() {
-        return correo;
-    }
-
-    public void setCorreo(String correo) {
-        this.correo = correo;
-    }
-
     public String getClave() {
         return clave;
     }
@@ -96,6 +86,8 @@ public class Usuario {
     public void setEstado(Boolean estado) {
         this.estado = estado;
     }
+
+    
     
     
 }

@@ -5,6 +5,13 @@
  */
 package app;
 
+import bd.DAO;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import model.Usuario;
+
 /**
  *
  * @author N1CK PL4Y
@@ -51,6 +58,11 @@ public class Login extends javax.swing.JFrame {
         jLabel3.setText("Clave:");
 
         btnIngresar.setText("INGRESAR");
+        btnIngresar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIngresarActionPerformed(evt);
+            }
+        });
 
         btnRegistro.setText("REGISTRO");
 
@@ -128,6 +140,40 @@ public class Login extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
+        try {
+            // TODO add your handling code here:
+            DAO oDao = new DAO();
+            Usuario oUsuario = oDao.isUsuario(txtRut.getText(), txtPass.getText());
+            M_principal oM_principal;
+            System.out.println("" + txtRut.getText() + txtPass.getText());
+            String rutU = txtRut.getText();
+            System.out.println(rutU);
+            if (oUsuario != null) {
+                if (oUsuario.getEstado()) {
+                    JOptionPane.showMessageDialog(rootPane, "Bienvenido " + oUsuario.getNombre());
+                    oM_principal = new M_principal(txtRut.getText());
+                    oM_principal.setVisible(true);
+                    this.dispose();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Su cuenta esta desactivada\n acuda a servicio al cliente", "Error", JOptionPane.WARNING_MESSAGE);
+                    txtRut.setText("");
+                    txtPass.setText("");
+                    txtRut.requestFocus();
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Error al ingresar \n 1.- El usuario no existe "
+                        + "\n 2.- Uno de los campos es incorrecto");
+                txtRut.setText("");
+                txtPass.setText("");
+                txtRut.requestFocus();
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnIngresarActionPerformed
 
     /**
      * @param args the command line arguments

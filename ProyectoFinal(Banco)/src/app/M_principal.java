@@ -10,12 +10,17 @@ package app;
  * @author N1CK PL4Y
  */
 public class M_principal extends javax.swing.JFrame {
-
+    public String rut;
     /**
      * Creates new form M_principal
      */
-    public M_principal() {
+    public M_principal(String rutString) {
+        rut = rutString;
         initComponents();
+    }
+
+    private M_principal() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     /**
@@ -187,10 +192,8 @@ public class M_principal extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new M_principal().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new M_principal().setVisible(true);
         });
     }
 

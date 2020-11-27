@@ -5,17 +5,35 @@
  */
 package app;
 
+import bd.DAO;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import model.Usuario;
+
 /**
  *
  * @author N1CK PL4Y
  */
 public class Transferencia extends javax.swing.JFrame {
 
+    int cuenta_ori;
+    DAO oDao;
+    DAO oDao2;
+
     /**
      * Creates new form Transferencia
      */
-    public Transferencia() {
+    public Transferencia(int cuenta) {
+        cuenta_ori = cuenta;
+        txtDesde.setText("" + cuenta_ori);
         initComponents();
+    }
+
+    private Transferencia() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     /**
@@ -32,7 +50,7 @@ public class Transferencia extends javax.swing.JFrame {
         txtDesde = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        cboOri = new javax.swing.JComboBox<>();
         txtRutH = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
@@ -42,8 +60,6 @@ public class Transferencia extends javax.swing.JFrame {
         txtNombreH = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         txtMontoH = new javax.swing.JTextField();
-        jLabel7 = new javax.swing.JLabel();
-        txtCorreoH = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
         txtMensajeH = new javax.swing.JTextField();
         btnTransferir = new javax.swing.JButton();
@@ -68,7 +84,7 @@ public class Transferencia extends javax.swing.JFrame {
         jLabel3.setText("Rut:");
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 85, -1, -1));
 
-        jPanel1.add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(229, 11, 124, -1));
+        jPanel1.add(cboOri, new org.netbeans.lib.awtextra.AbsoluteConstraints(229, 11, 124, -1));
         jPanel1.add(txtRutH, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 83, 141, -1));
 
         jButton1.setText("Buscar Destinatario");
@@ -88,16 +104,23 @@ public class Transferencia extends javax.swing.JFrame {
         jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 200, -1, -1));
         jPanel1.add(txtMontoH, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 200, 140, -1));
 
-        jLabel7.setText("Correo:");
-        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 240, -1, -1));
-        jPanel1.add(txtCorreoH, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 240, 140, -1));
-
         jLabel8.setText("Mensaje:");
-        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 280, -1, -1));
-        jPanel1.add(txtMensajeH, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 280, 140, -1));
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 240, -1, -1));
+
+        txtMensajeH.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtMensajeHActionPerformed(evt);
+            }
+        });
+        jPanel1.add(txtMensajeH, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 240, 270, -1));
 
         btnTransferir.setText("Transferir");
-        jPanel1.add(btnTransferir, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 320, -1, -1));
+        btnTransferir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTransferirActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnTransferir, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 280, -1, -1));
 
         btnVolver.setText("Volver");
         btnVolver.addActionListener(new java.awt.event.ActionListener() {
@@ -105,7 +128,7 @@ public class Transferencia extends javax.swing.JFrame {
                 btnVolverActionPerformed(evt);
             }
         });
-        jPanel1.add(btnVolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 350, -1, -1));
+        jPanel1.add(btnVolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 280, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -115,17 +138,25 @@ public class Transferencia extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
-        M_principal principal = new M_principal();
+        M_principal principal = new M_principal(getRutUsuario(cuenta_ori));
         principal.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_btnVolverActionPerformed
+
+    private void btnTransferirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTransferirActionPerformed
+
+    }//GEN-LAST:event_btnTransferirActionPerformed
+
+    private void txtMensajeHActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMensajeHActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtMensajeHActionPerformed
 
     /**
      * @param args the command line arguments
@@ -165,8 +196,8 @@ public class Transferencia extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnTransferir;
     private javax.swing.JButton btnVolver;
+    private javax.swing.JComboBox<String> cboOri;
     private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -174,10 +205,8 @@ public class Transferencia extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField txtCorreoH;
     private javax.swing.JTextField txtCuentaH;
     private javax.swing.JTextField txtDesde;
     private javax.swing.JTextField txtMensajeH;
@@ -185,4 +214,58 @@ public class Transferencia extends javax.swing.JFrame {
     private javax.swing.JTextField txtNombreH;
     private javax.swing.JTextField txtRutH;
     // End of variables declaration//GEN-END:variables
+private String getRutUsuario(int n_cuenta) {
+        try {
+            oDao = new DAO();
+            String rutV;
+            rutV = oDao.getRutUsuario(n_cuenta);
+            return rutV;
+        } catch (SQLException ex) {
+            Logger.getLogger(Transferencia.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    private void TransferirMonto(int _Origen, int _Destino, int _Monto, String mensaje, int i, int id_D) {
+        try {
+            oDao = new DAO();
+            //oDao2=new DAO();
+            Usuario oUsuario = new Usuario();
+            oUsuario = oDao.getUserRegisted(getRutUsuario(cuenta_ori));
+            //oUsuario.getSaldo();
+            M_principal oM_principal;
+            if (cboOri.getSelectedIndex() == 3) {
+                //alerta cuenta de ahorro
+            } else {
+                if (_Monto > 0 && _Monto < 200000) {
+                    oDao.transferencia(_Origen, _Destino, _Monto, i, mensaje, id_D);
+                    JOptionPane.showMessageDialog(rootPane, "Transferencia Exitosa");
+                    oM_principal = new M_principal(getRutUsuario(cuenta_ori));
+                    oM_principal.setVisible(true);
+                    this.dispose();
+                } else {
+                    JOptionPane.showMessageDialog(rootPane, "Monto invalido");
+                }
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Transferencia.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void getUsuario(String r_Usuario) {
+
+        try {
+            oDao = new DAO();
+            Usuario oUsuario;
+            oUsuario = oDao.getUserRegisted(r_Usuario);
+            if (oUsuario != null) {
+
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(M_principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
 }

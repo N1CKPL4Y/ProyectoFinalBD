@@ -3,7 +3,7 @@ CREATE DATABASE banco;
 USE banco;
 
 
-CREATE TABLE tipo_cuenta (
+CREATE TABLE tipo_cuenta ( -- 3 insert (debito, credito, ahorro)
   id int(11) AUTO_INCREMENT,
   detalle varchar(30),
 
@@ -17,7 +17,7 @@ CREATE TABLE motivo (
   PRIMARY KEY(id)
 );
 
-CREATE TABLE trabajador(
+CREATE TABLE trabajador( -- 1 insert
   rut varchar(20),
   nombre varchar(20),
   apellido varchar(30),
@@ -28,20 +28,19 @@ CREATE TABLE trabajador(
   PRIMARY KEY(rut)
 );
 
-CREATE TABLE usuario(
+CREATE TABLE usuario( -- 1 insert
   n_Cuenta int(11),
   rut varchar(20),
   nombre varchar(50),
   apellido_P varchar(50),
   apellido_M varchar(50),
-  correo varchar(50),
   clave varchar(10),
   estado bit(1),
 
   PRIMARY KEY(n_Cuenta)
 );
 
-CREATE TABLE cuenta (
+CREATE TABLE cuenta ( -- 3 insert
   id int(11),
   n_Cuenta int(11),
   tipo int(11),
@@ -83,6 +82,24 @@ CREATE TABLE movimiento(
   FOREIGN KEY(n_Cuenta_Des) REFERENCES usuario(n_Cuenta),
   FOREIGN KEY(cuenta) REFERENCES cuenta(id)
 );
+
+-- Procedimientos
+DELIMITER @@
+DROP PROCEDURE transferencia_Bancaria @@
+CREATE PROCEDURE transferencia_Bancaria
+(IN Ori INT, IN Des INT, IN Mon INT, IN t_C_Ori INT, IN msg VARCHAR(100), IN t_C_Des INT)
+BEGIN 
+    INSERT INTO movimiento VALUES(null,msg,Ori,Des,CURDATE(),curTime(),Mon,t_C_Ori);
+
+        IF t_C_Ori=2 THEN
+            UPDATE cuenta SET saldo_C=saldo_C-Mon WHERE n_Cuenta=Ori and tipo=t_C_Ori;
+        ELSE
+            UPDATE cuenta SET saldo=saldo-Mon WHERE n_Cuenta=Ori and tipo=t_C_Ori;
+            UPDATE cuenta SET saldo=saldo+Mon WHERE n_Cuenta=Des and tipo=t_C_Des;
+        END IF;
+
+END @@ 
+DELIMITER ;
 
 
 
