@@ -46,7 +46,7 @@ public class Login extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel1.setBackground(new java.awt.Color(51, 153, 0));
+        jPanel1.setBackground(new java.awt.Color(0, 204, 102));
 
         jLabel1.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         jLabel1.setText("LOGIN");
@@ -151,7 +151,7 @@ public class Login extends javax.swing.JFrame {
             String rutU = txtRut.getText();
             System.out.println(rutU);
             if (oUsuario != null) {
-                if (oUsuario.getEstado()) {
+                if (oUsuario.isEstado()) {
                     JOptionPane.showMessageDialog(rootPane, "Bienvenido " + oUsuario.getNombre());
                     oM_principal = new M_principal(txtRut.getText());
                     oM_principal.setVisible(true);

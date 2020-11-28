@@ -5,6 +5,12 @@
  */
 package app;
 
+import bd.DAO;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author N1CK PL4Y
@@ -32,13 +38,11 @@ public class RegistroUsuario extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         apellidoMNU = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        rutNU1 = new javax.swing.JTextField();
+        rutNU = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        nombresNU1 = new javax.swing.JTextField();
+        nombresNU = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        apellidoPNU1 = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
-        correoNU = new javax.swing.JTextField();
+        apellidoPNU = new javax.swing.JTextField();
         btnRegistrar = new javax.swing.JButton();
         btnVolver = new javax.swing.JButton();
 
@@ -54,22 +58,23 @@ public class RegistroUsuario extends javax.swing.JFrame {
 
         jLabel2.setText("Nombres:");
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, -1, -1));
-        jPanel1.add(rutNU1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 20, 140, -1));
+        jPanel1.add(rutNU, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 20, 140, -1));
 
         jLabel3.setText("Apellido Materno:");
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 140, -1, -1));
-        jPanel1.add(nombresNU1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 60, 140, -1));
+        jPanel1.add(nombresNU, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 60, 140, -1));
 
         jLabel4.setText("Apellido Paterno:");
         jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, -1, -1));
-        jPanel1.add(apellidoPNU1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 100, 140, -1));
-
-        jLabel5.setText("Correo:");
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 180, -1, -1));
-        jPanel1.add(correoNU, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 180, 140, -1));
+        jPanel1.add(apellidoPNU, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 100, 140, -1));
 
         btnRegistrar.setText("Registrar");
-        jPanel1.add(btnRegistrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 220, -1, -1));
+        btnRegistrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegistrarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnRegistrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 180, -1, -1));
 
         btnVolver.setText("Volver");
         btnVolver.addActionListener(new java.awt.event.ActionListener() {
@@ -77,7 +82,7 @@ public class RegistroUsuario extends javax.swing.JFrame {
                 btnVolverActionPerformed(evt);
             }
         });
-        jPanel1.add(btnVolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 270, -1, -1));
+        jPanel1.add(btnVolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 240, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -87,7 +92,7 @@ public class RegistroUsuario extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 273, Short.MAX_VALUE)
         );
 
         pack();
@@ -98,6 +103,27 @@ public class RegistroUsuario extends javax.swing.JFrame {
         salir.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_btnVolverActionPerformed
+
+    private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
+        String rut = rutNU.getText();
+        //capturar clave(4 ultimos digitos del rut) a partir del rut ingresado
+        String a = (rut.substring(5,6)+rut.substring(7,10));
+        //capturar n_cuenta(rut sin digito verificador, sin punto ni guion) a partir del rut ingresado
+        String b = (rut.substring(0,2)+rut.substring(3,6)+rut.substring(7,10));
+        int c = Integer.parseInt(b);
+        try {
+            DAO oDao = new DAO();
+            oDao.crearUsuario(c, rut, nombresNU.getText(), apellidoPNU.getText(), apellidoMNU.getText(), a);
+            JOptionPane.showMessageDialog(rootPane, "Registro Completado, \n su clave son los 4 ultimos digitos de su rut antes del digito verificador ¡Recuerde cambiar su clave al primer inicio de sesion!");
+            Login salir = new Login();
+            salir.setVisible(true);
+            this.setVisible(false);
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(RegistroUsuario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }//GEN-LAST:event_btnRegistrarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -136,18 +162,16 @@ public class RegistroUsuario extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField apellidoMNU;
-    private javax.swing.JTextField apellidoPNU1;
+    private javax.swing.JTextField apellidoPNU;
     private javax.swing.JButton btnRegistrar;
     private javax.swing.JButton btnVolver;
-    private javax.swing.JTextField correoNU;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField nombresNU1;
-    private javax.swing.JTextField rutNU1;
+    private javax.swing.JTextField nombresNU;
+    private javax.swing.JTextField rutNU;
     // End of variables declaration//GEN-END:variables
 }

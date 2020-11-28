@@ -5,6 +5,13 @@
  */
 package app;
 
+import bd.DAO;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import model.Trabajador;
+
 /**
  *
  * @author N1CK PL4Y
@@ -56,7 +63,12 @@ public class LoginTrabajador extends javax.swing.JFrame {
         jPanel1.add(btnVolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 150, -1, -1));
 
         btnIngresar.setText("Ingresar");
-        jPanel1.add(btnIngresar, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 150, -1, -1));
+        btnIngresar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIngresarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnIngresar, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 150, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -71,6 +83,30 @@ public class LoginTrabajador extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
+        try {
+            // TODO add your handling code here:
+            DAO oDao = new DAO();
+            Trabajador oTrabajador;
+            oTrabajador = oDao.isTrabajador(rutTra.getText(), claveTra.getText());
+            if (oTrabajador != null) {
+                JOptionPane.showMessageDialog(rootPane, "Bienvenido " + oTrabajador.getNombre());
+                Solicitudes oSolicitudes = new Solicitudes(rutTra.getText());
+                oSolicitudes.setVisible(true);
+                this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(null, "Error al ingresar \n 1.- El usuario no existe "
+                        + "\n 2.- Uno de los campos es incorrecto");
+                rutTra.setText("");
+                claveTra.setText("");
+                rutTra.requestFocus();
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(LoginTrabajador.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnIngresarActionPerformed
 
     /**
      * @param args the command line arguments

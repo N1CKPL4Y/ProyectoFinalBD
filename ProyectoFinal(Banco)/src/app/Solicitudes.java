@@ -5,17 +5,33 @@
  */
 package app;
 
+import bd.DAO;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import model.Motivo;
+import model.Usuario;
+
 /**
  *
  * @author N1CK PL4Y
  */
 public class Solicitudes extends javax.swing.JFrame {
-
+    String rutIng;
+    DAO oDao;
     /**
      * Creates new form Solicitudes
      */
-    public Solicitudes() {
+    public Solicitudes(String rutTrabajador) {
+        rutIng = rutTrabajador;
         initComponents();
+        cargarCbo();
+    }
+
+    private Solicitudes() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     /**
@@ -40,12 +56,12 @@ public class Solicitudes extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         apellido2U = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        estadoCU = new javax.swing.JTextField();
+        estadoU = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        cboMotivo = new javax.swing.JComboBox<>();
         jLabel8 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        txtDescripcion = new javax.swing.JTextArea();
         btnEnviar = new javax.swing.JButton();
         btnVolver = new javax.swing.JButton();
 
@@ -58,6 +74,11 @@ public class Solicitudes extends javax.swing.JFrame {
         jPanel1.add(rutU, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 10, 150, -1));
 
         btnBuscar.setText("Buscar");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 10, -1, -1));
 
         jLabel2.setText("Nombre:");
@@ -78,24 +99,29 @@ public class Solicitudes extends javax.swing.JFrame {
 
         jLabel7.setText("Estado:");
         jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, -1, -1));
-        jPanel1.add(estadoCU, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 130, 100, -1));
+        jPanel1.add(estadoU, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 130, 100, -1));
 
         jLabel6.setText("Motivo:");
         jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 130, -1, -1));
 
-        jPanel1.add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 130, 150, -1));
+        jPanel1.add(cboMotivo, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 130, 150, -1));
 
         jLabel8.setText("Detalle Solicitud:");
         jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 170, -1, -1));
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        txtDescripcion.setColumns(20);
+        txtDescripcion.setRows(5);
+        jScrollPane1.setViewportView(txtDescripcion);
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 170, 330, 130));
 
         btnEnviar.setText("Enviar");
-        jPanel1.add(btnEnviar, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 320, -1, -1));
+        btnEnviar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEnviarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnEnviar, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 310, -1, -1));
 
         btnVolver.setText("Volver");
         btnVolver.addActionListener(new java.awt.event.ActionListener() {
@@ -103,7 +129,7 @@ public class Solicitudes extends javax.swing.JFrame {
                 btnVolverActionPerformed(evt);
             }
         });
-        jPanel1.add(btnVolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 320, -1, -1));
+        jPanel1.add(btnVolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 310, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -124,6 +150,55 @@ public class Solicitudes extends javax.swing.JFrame {
         login.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_btnVolverActionPerformed
+
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        getUsuario(rutU.getText());
+    }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void btnEnviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnviarActionPerformed
+        int n = 0;
+        try {
+            // TODO add your handling code here:
+            oDao = new DAO();
+            switch (cboMotivo.getSelectedIndex()) {
+                case 0:
+                    JOptionPane.showMessageDialog(rootPane, "Debe selecionar una opcion");
+                    break;
+                case 1:
+                    n = cboMotivo.getSelectedIndex();
+                    oDao.estadoCuenta(Integer.parseInt(cuentaU.getText()), 1);
+                    oDao.solicitud(Integer.parseInt(cuentaU.getText()), rutIng, txtDescripcion.getText(), n);
+                    JOptionPane.showMessageDialog(rootPane, "Enviada");
+                    break;
+                case 2:
+                    n = cboMotivo.getSelectedIndex();
+                    oDao.estadoCuenta(Integer.parseInt(cuentaU.getText()), 0);
+                    oDao.solicitud(Integer.parseInt(cuentaU.getText()), rutIng, txtDescripcion.getText(), n);
+                    JOptionPane.showMessageDialog(rootPane, "Enviada");
+                    break;
+                case 3:
+                    n = cboMotivo.getSelectedIndex();
+                    oDao.solicitud(Integer.parseInt(cuentaU.getText()), rutIng, txtDescripcion.getText(), n);
+                    JOptionPane.showMessageDialog(rootPane, "Enviada");
+                    break;
+                case 4:
+                    n = cboMotivo.getSelectedIndex();
+                    oDao.solicitud(Integer.parseInt(cuentaU.getText()), rutIng, txtDescripcion.getText(), n);
+                    JOptionPane.showMessageDialog(rootPane, "Enviada");
+                    break;
+                case 5:
+                    n = cboMotivo.getSelectedIndex();
+                    oDao.solicitud(Integer.parseInt(cuentaU.getText()), rutIng, txtDescripcion.getText(), n);
+                    JOptionPane.showMessageDialog(rootPane, "Enviada");
+                    break;
+                default:
+                    break;
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(Solicitudes.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnEnviarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -166,9 +241,9 @@ public class Solicitudes extends javax.swing.JFrame {
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnEnviar;
     private javax.swing.JButton btnVolver;
+    private javax.swing.JComboBox<String> cboMotivo;
     private javax.swing.JTextField cuentaU;
-    private javax.swing.JTextField estadoCU;
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JTextField estadoU;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -179,8 +254,48 @@ public class Solicitudes extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField nombreU;
     private javax.swing.JTextField rutU;
+    private javax.swing.JTextArea txtDescripcion;
     // End of variables declaration//GEN-END:variables
+    private void cargarCbo() {
+        cboMotivo.removeAllItems();
+        cboMotivo.addItem("Seleccione un motivo");
+        try {
+            oDao = new DAO();
+            List<Motivo> motivo = oDao.getMotivo();
+            for (Motivo motivo1 : motivo) {
+                cboMotivo.addItem(motivo1.getDetalle());
+            }
+//            if (oMotivo!=null) {
+//                cboMotivo.addItem(oMotivo.getDetalle());
+//            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Solicitudes.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void getUsuario(String r_Usuario) {
+
+        try {
+            oDao = new DAO();
+            Usuario oUsuario;
+            oUsuario = oDao.getUserRegisted(r_Usuario);
+            if (oUsuario != null) {
+               nombreU.setText(oUsuario.getNombre());
+               cuentaU.setText(""+oUsuario.getN_Cuenta());
+               apellido1U.setText(oUsuario.getApellido_P());
+               apellido2U.setText(oUsuario.getApellido_M());
+               if (oUsuario.isEstado()) {
+                    estadoU.setText("Activa");
+                } else {
+                    estadoU.setText("Desactiva");
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(M_principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
 }

@@ -16,12 +16,12 @@ public class Usuario {
     private String apellido_P;
     private String apellido_M;
     private String clave;
-    private Boolean estado;
+    private boolean estado;
 
     public Usuario() {
     }
 
-    public Usuario(int n_Cuenta, String rut, String nombre, String apellido_P, String apellido_M, String clave, Boolean estado) {
+    public Usuario(int n_Cuenta, String rut, String nombre, String apellido_P, String apellido_M, String clave, boolean estado) {
         this.n_Cuenta = n_Cuenta;
         this.rut = rut;
         this.nombre = nombre;
@@ -79,13 +79,15 @@ public class Usuario {
         this.clave = clave;
     }
 
-    public Boolean getEstado() {
+    public boolean isEstado() {
         return estado;
     }
 
-    public void setEstado(Boolean estado) {
+    public void setEstado(boolean estado) {
         this.estado = estado;
     }
+
+    
 
     
     

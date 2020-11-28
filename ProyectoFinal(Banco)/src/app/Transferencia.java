@@ -8,9 +8,11 @@ package app;
 import bd.DAO;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import model.Tipo_cuenta;
 import model.Usuario;
 
 /**
@@ -30,6 +32,8 @@ public class Transferencia extends javax.swing.JFrame {
         cuenta_ori = cuenta;
         txtDesde.setText("" + cuenta_ori);
         initComponents();
+        cargarCbo();
+        cargarCbo_des();
     }
 
     private Transferencia() {
@@ -55,7 +59,7 @@ public class Transferencia extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         txtCuentaH = new javax.swing.JTextField();
-        jComboBox2 = new javax.swing.JComboBox<>();
+        cboDes = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
         txtNombreH = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
@@ -94,7 +98,7 @@ public class Transferencia extends javax.swing.JFrame {
         jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 126, -1, -1));
         jPanel1.add(txtCuentaH, new org.netbeans.lib.awtextra.AbsoluteConstraints(71, 123, 140, -1));
 
-        jPanel1.add(jComboBox2, new org.netbeans.lib.awtextra.AbsoluteConstraints(229, 123, 125, -1));
+        jPanel1.add(cboDes, new org.netbeans.lib.awtextra.AbsoluteConstraints(229, 123, 125, -1));
 
         jLabel5.setText("Nombre:");
         jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 164, -1, -1));
@@ -151,7 +155,7 @@ public class Transferencia extends javax.swing.JFrame {
     }//GEN-LAST:event_btnVolverActionPerformed
 
     private void btnTransferirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTransferirActionPerformed
-
+        TransferirMonto(cuenta_ori, Integer.parseInt(txtCuentaH.getText()), Integer.parseInt(txtMontoH.getText()), txtMensajeH.getText(), cboOri.getSelectedIndex(), cboDes.getSelectedIndex());
     }//GEN-LAST:event_btnTransferirActionPerformed
 
     private void txtMensajeHActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMensajeHActionPerformed
@@ -196,9 +200,9 @@ public class Transferencia extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnTransferir;
     private javax.swing.JButton btnVolver;
+    private javax.swing.JComboBox<String> cboDes;
     private javax.swing.JComboBox<String> cboOri;
     private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -236,6 +240,7 @@ private String getRutUsuario(int n_cuenta) {
             M_principal oM_principal;
             if (cboOri.getSelectedIndex() == 3) {
                 //alerta cuenta de ahorro
+                JOptionPane.showMessageDialog(rootPane, "Imposible de realizar");
             } else {
                 if (_Monto > 0 && _Monto < 200000) {
                     oDao.transferencia(_Origen, _Destino, _Monto, i, mensaje, id_D);
@@ -266,6 +271,36 @@ private String getRutUsuario(int n_cuenta) {
             Logger.getLogger(M_principal.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+    }
+
+    private void cargarCbo() {
+        cboOri.removeAllItems();
+        try {
+            //cboOri.addItem("Seleccione una opcion");
+            oDao = new DAO();
+            List<Tipo_cuenta> t_cuenta = oDao.getT_cuenta();
+            for(Tipo_cuenta oTipo_cuenta:t_cuenta){
+                cboOri.addItem(oTipo_cuenta.getDetalle());
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Transferencia.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+
+    private void cargarCbo_des() {
+        cboDes.removeAllItems();
+        try {
+            //cboOri.addItem("Seleccione una opcion");
+            oDao = new DAO();
+            List<Tipo_cuenta> t_cuenta = oDao.getT_cuenta();
+            for(Tipo_cuenta oTipo_cuenta:t_cuenta){
+                cboDes.addItem(oTipo_cuenta.getDetalle());
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Transferencia.class.getName()).log(Level.SEVERE, null, ex);
+        }
+         
     }
 
 }
