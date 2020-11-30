@@ -24,6 +24,8 @@ public class CambioDeClave extends javax.swing.JFrame {
     public CambioDeClave(String rutString) {
         volver = rutString;
         initComponents();
+        
+        setTitle("Cambio de Clave");
     }
 
     private CambioDeClave() {
@@ -42,16 +44,19 @@ public class CambioDeClave extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        ClaveActual = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        ClaveNueva = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        ConfirmarClave = new javax.swing.JTextField();
         btnVolver = new javax.swing.JButton();
         btnContinuar = new javax.swing.JButton();
+        ClaveActual = new javax.swing.JPasswordField();
+        ClaveNueva = new javax.swing.JPasswordField();
+        ConfirmarClave = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(0, 204, 102));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanel1.setBackground(new java.awt.Color(0, 204, 102));
 
         jLabel1.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         jLabel1.setText("Cambio De Clave");
@@ -59,28 +64,10 @@ public class CambioDeClave extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel2.setText("Clave Actual: ");
 
-        ClaveActual.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ClaveActualActionPerformed(evt);
-            }
-        });
-
         jLabel3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel3.setText("Nueva Clave:");
 
-        ClaveNueva.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ClaveNuevaActionPerformed(evt);
-            }
-        });
-
         jLabel4.setText("Confirmar Clave:");
-
-        ConfirmarClave.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ConfirmarClaveActionPerformed(evt);
-            }
-        });
 
         btnVolver.setText("Volver");
         btnVolver.addActionListener(new java.awt.event.ActionListener() {
@@ -105,28 +92,28 @@ public class CambioDeClave extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addGap(134, 134, 134))
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(29, 29, 29)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(ClaveNueva, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(ClaveActual, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnVolver))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(ConfirmarClave, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(27, 27, 27)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(ClaveActual, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(ClaveNueva, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(166, 166, 166)
-                        .addComponent(btnContinuar)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(ConfirmarClave, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(148, 148, 148)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(6, 6, 6)
+                                .addComponent(btnVolver))
+                            .addComponent(btnContinuar))))
+                .addContainerGap(82, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -147,23 +134,15 @@ public class CambioDeClave extends javax.swing.JFrame {
                     .addComponent(ConfirmarClave, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(btnContinuar)
-                .addGap(1, 1, 1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnVolver)
-                .addContainerGap(70, Short.MAX_VALUE))
+                .addContainerGap(40, Short.MAX_VALUE))
         );
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 370, 270));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void ClaveNuevaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ClaveNuevaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ClaveNuevaActionPerformed
-
-    private void ConfirmarClaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ConfirmarClaveActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ConfirmarClaveActionPerformed
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
         M_principal principal = new M_principal(volver);
@@ -216,10 +195,6 @@ public class CambioDeClave extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnContinuarActionPerformed
 
-    private void ClaveActualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ClaveActualActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ClaveActualActionPerformed
-
     /**
      * @param args the command line arguments
      */
@@ -256,9 +231,9 @@ public class CambioDeClave extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField ClaveActual;
-    private javax.swing.JTextField ClaveNueva;
-    private javax.swing.JTextField ConfirmarClave;
+    private javax.swing.JPasswordField ClaveActual;
+    private javax.swing.JPasswordField ClaveNueva;
+    private javax.swing.JPasswordField ConfirmarClave;
     private javax.swing.JButton btnContinuar;
     private javax.swing.JButton btnVolver;
     private javax.swing.JLabel jLabel1;

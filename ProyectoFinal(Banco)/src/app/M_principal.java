@@ -5,18 +5,46 @@
  */
 package app;
 
+import bd.DAO;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
+import model.Cuenta;
+import model.Movimiento;
+import model.Tipo_cuenta;
+import model.Usuario;
+
 /**
  *
  * @author N1CK PL4Y
  */
 public class M_principal extends javax.swing.JFrame {
+
     public String rut;
+    public DAO oDao;
+    public DefaultTableModel otabla = new DefaultTableModel();
+
     /**
      * Creates new form M_principal
      */
     public M_principal(String rutString) {
         rut = rutString;
         initComponents();
+
+        cargarCbo();
+
+        setTitle("Menú Principal");
+        otabla.addColumn("Fecha");
+        otabla.addColumn("Cuenta Origen");
+        otabla.addColumn("Cuenta Destino");
+        otabla.addColumn("Mensaje");
+        otabla.addColumn("Monto");
+        otabla.addColumn("Tipo Cuenta");
+        tblMovimientos.setModel(otabla);
+        getUsuario(rut);
+        cargarTabla();
     }
 
     private M_principal() {
@@ -40,13 +68,17 @@ public class M_principal extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         txtSaldo = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblMovimientos = new javax.swing.JTable();
         btnTrans = new javax.swing.JButton();
         btnCambiar = new javax.swing.JButton();
-        btnDesactivar = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
+        cboOri = new javax.swing.JComboBox<>();
+        btnCargar = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jPanel1.setBackground(new java.awt.Color(0, 204, 102));
 
         jLabel1.setText("BIENVENIDO/A:");
 
@@ -60,7 +92,7 @@ public class M_principal extends javax.swing.JFrame {
 
         txtSaldo.setEditable(false);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblMovimientos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -71,13 +103,21 @@ public class M_principal extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tblMovimientos);
 
         btnTrans.setText("Transferencia");
+        btnTrans.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTransActionPerformed(evt);
+            }
+        });
 
         btnCambiar.setText("Cambiar Clave");
-
-        btnDesactivar.setText("Desactivar Cuenta");
+        btnCambiar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCambiarActionPerformed(evt);
+            }
+        });
 
         btnSalir.setText("Cerrar Sesion");
         btnSalir.addActionListener(new java.awt.event.ActionListener() {
@@ -86,6 +126,16 @@ public class M_principal extends javax.swing.JFrame {
             }
         });
 
+        btnCargar.setText("Cargar");
+        btnCargar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCargarActionPerformed(evt);
+            }
+        });
+
+        jLabel4.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        jLabel4.setText("Historial de movimientos");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -93,32 +143,40 @@ public class M_principal extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(23, 23, 23)
                                         .addComponent(txtCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(txtSaldo, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(btnTrans)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnCambiar)
-                                .addGap(38, 38, 38)
-                                .addComponent(btnDesactivar)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnSalir)))
-                        .addGap(0, 4, Short.MAX_VALUE)))
-                .addContainerGap())
+                                        .addComponent(txtSaldo, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(cboOri, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(btnCargar)))
+                                .addGap(0, 9, Short.MAX_VALUE)))
+                        .addContainerGap())
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnTrans)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnCambiar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnSalir)
+                        .addGap(20, 20, 20))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel4)
+                .addGap(207, 207, 207))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -132,16 +190,19 @@ public class M_principal extends javax.swing.JFrame {
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3)
-                    .addComponent(txtSaldo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(41, 41, 41)
+                    .addComponent(txtSaldo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cboOri, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCargar))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel4)
+                .addGap(9, 9, 9)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(27, 27, 27)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnTrans)
                     .addComponent(btnCambiar)
-                    .addComponent(btnDesactivar)
                     .addComponent(btnSalir))
-                .addContainerGap(29, Short.MAX_VALUE))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -163,6 +224,47 @@ public class M_principal extends javax.swing.JFrame {
         cerrar.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_btnSalirActionPerformed
+
+    private void btnTransActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTransActionPerformed
+        Transferencia transferir = new Transferencia(Integer.parseInt(txtCuenta.getText()));
+        transferir.setVisible(true);
+        this.setVisible(false);
+
+    }//GEN-LAST:event_btnTransActionPerformed
+
+    private void btnCambiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCambiarActionPerformed
+        CambioDeClave cambio = new CambioDeClave(rut);
+        cambio.setVisible(true);
+        this.setVisible(false);
+
+    }//GEN-LAST:event_btnCambiarActionPerformed
+
+    private void btnCargarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCargarActionPerformed
+        Cuenta ocuenta;
+        try {
+            switch (cboOri.getSelectedIndex()) {
+                case 0:
+                    ocuenta = new Cuenta();
+                    ocuenta = oDao.get_debito(Integer.parseInt(txtCuenta.getText()));
+                    txtSaldo.setText(""+ocuenta.getSaldo());
+                    break;
+                case 1:
+                    ocuenta = new Cuenta();
+                    ocuenta = oDao.get_credito(Integer.parseInt(txtCuenta.getText()));
+                    txtSaldo.setText(""+ocuenta.getSaldo_C());
+                    break;
+                case 2:
+                    ocuenta = new Cuenta();
+                    ocuenta = oDao.get_ahorro(Integer.parseInt(txtCuenta.getText()));
+                    txtSaldo.setText(""+ocuenta.getSaldo());
+                    break;
+                default:
+                    break;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(M_principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnCargarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -199,17 +301,110 @@ public class M_principal extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCambiar;
-    private javax.swing.JButton btnDesactivar;
+    private javax.swing.JButton btnCargar;
     private javax.swing.JButton btnSalir;
     private javax.swing.JButton btnTrans;
+    private javax.swing.JComboBox<String> cboOri;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable tblMovimientos;
     private javax.swing.JTextField txtCuenta;
     private javax.swing.JTextField txtNombre;
     private javax.swing.JTextField txtSaldo;
     // End of variables declaration//GEN-END:variables
+private void cargarCbo() {
+        cboOri.removeAllItems();
+        try {
+            //cboOri.addItem("Seleccione una opcion");
+            oDao = new DAO();
+            List<Tipo_cuenta> t_cuenta = oDao.getT_cuenta();
+            for (Tipo_cuenta oTipo_cuenta : t_cuenta) {
+                cboOri.addItem(oTipo_cuenta.getDetalle());
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Transferencia.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    private void cargarTabla() {
+        otabla.setRowCount(0);
+
+        try {
+            oDao = new DAO();
+            //Movimiento oMovimiento=oDao.hayMovimientos();
+            //Movimiento[] movimientos=new Movimiento[oModeloTabla.getColumnCount()];
+            String[] movimientos = new String[otabla.getColumnCount()];
+            for (Movimiento oMovimiento : oDao.mostrarMovimiento()) {
+
+                if (txtCuenta.getText().equalsIgnoreCase(String.valueOf(oMovimiento.getN_Cuenta_Ori()))) {
+                    movimientos[0] = "" + oMovimiento.getFecha() + "  " + oMovimiento.getHora();
+                    movimientos[1] = "" + oMovimiento.getN_Cuenta_Ori();
+                    movimientos[2] = "" + oMovimiento.getN_Cuenta_Des();
+                    movimientos[3] = oMovimiento.getDescripcion();
+                    movimientos[4] = "-" + oMovimiento.getMonto();
+                    switch(oMovimiento.getCuenta()){
+                        case 1:
+                            movimientos[5] = "Debito";
+                            break;
+                        case 2:
+                            movimientos[5] = "Credito";
+                            break;
+                        case 3:
+                            movimientos[5] = "Ahorro";
+                            break;
+                    }
+                    otabla.addRow(movimientos);
+                } else if (txtCuenta.getText().equalsIgnoreCase(String.valueOf(oMovimiento.getN_Cuenta_Des()))) {
+                    movimientos[0] = "" + oMovimiento.getFecha() + "  " + oMovimiento.getHora();
+                    movimientos[1] = "" + oMovimiento.getN_Cuenta_Ori();
+                    movimientos[2] = "" + oMovimiento.getN_Cuenta_Des();
+                    movimientos[3] = oMovimiento.getDescripcion();
+                    movimientos[4] = "+" + oMovimiento.getMonto();
+                    switch(oMovimiento.getCuenta()){
+                        case 1:
+                            movimientos[5] = "Debito";
+                            break;
+                        case 2:
+                            movimientos[5] = "Credito";
+                            break;
+                        case 3:
+                            movimientos[5] = "Ahorro";
+                            break;
+                    }
+                    otabla.addRow(movimientos);
+                } else {
+                    System.out.println("No ha realizado ninguna transaccion");
+                }
+
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(M_principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    private void getUsuario(String r_Usuario) {
+
+        try {
+            oDao = new DAO();
+            Usuario oUsuario;
+            oUsuario = oDao.getUserRegisted(r_Usuario);
+            Cuenta ocuenta = oDao.get_debito(oUsuario.getN_Cuenta());
+            if (oUsuario != null) {
+                txtNombre.setText(oUsuario.getNombre());
+                txtCuenta.setText("" + oUsuario.getN_Cuenta());
+                txtSaldo.setText("" + ocuenta.getSaldo());
+
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(M_principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
 }

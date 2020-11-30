@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import model.Rut;
 import model.Tipo_cuenta;
 import model.Usuario;
 
@@ -30,13 +31,20 @@ public class Transferencia extends javax.swing.JFrame {
      */
     public Transferencia(int cuenta) {
         cuenta_ori = cuenta;
-        txtDesde.setText("" + cuenta_ori);
+        
         initComponents();
+        txtDesde.setText("" + cuenta_ori);
         cargarCbo();
         cargarCbo_des();
+        
+        setTitle("Transferencias");
     }
 
     private Transferencia() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    Transferencia(String rut) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -71,6 +79,7 @@ public class Transferencia extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jPanel1.setBackground(new java.awt.Color(0, 204, 102));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -89,9 +98,20 @@ public class Transferencia extends javax.swing.JFrame {
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 85, -1, -1));
 
         jPanel1.add(cboOri, new org.netbeans.lib.awtextra.AbsoluteConstraints(229, 11, 124, -1));
+
+        txtRutH.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtRutHKeyReleased(evt);
+            }
+        });
         jPanel1.add(txtRutH, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 83, 141, -1));
 
         jButton1.setText("Buscar Destinatario");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
         jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(229, 82, -1, -1));
 
         jLabel4.setText("N° Cuenta:");
@@ -138,7 +158,7 @@ public class Transferencia extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 366, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 390, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -161,6 +181,16 @@ public class Transferencia extends javax.swing.JFrame {
     private void txtMensajeHActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMensajeHActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtMensajeHActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        getUsuario(txtRutH.getText());
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void txtRutHKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtRutHKeyReleased
+        Rut oRut = new Rut();
+        txtRutH.setText(oRut.formatear(txtRutH.getText()));
+    }//GEN-LAST:event_txtRutHKeyReleased
 
     /**
      * @param args the command line arguments
@@ -258,23 +288,9 @@ private String getRutUsuario(int n_cuenta) {
         }
     }
 
-    private void getUsuario(String r_Usuario) {
-
-        try {
-            oDao = new DAO();
-            Usuario oUsuario;
-            oUsuario = oDao.getUserRegisted(r_Usuario);
-            if (oUsuario != null) {
-
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(M_principal.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-    }
-
     private void cargarCbo() {
         cboOri.removeAllItems();
+        cboOri.addItem("seleccione una opcion");
         try {
             //cboOri.addItem("Seleccione una opcion");
             oDao = new DAO();
@@ -290,6 +306,7 @@ private String getRutUsuario(int n_cuenta) {
 
     private void cargarCbo_des() {
         cboDes.removeAllItems();
+        cboDes.addItem("seleccione una opcion");
         try {
             //cboOri.addItem("Seleccione una opcion");
             oDao = new DAO();
@@ -301,6 +318,22 @@ private String getRutUsuario(int n_cuenta) {
             Logger.getLogger(Transferencia.class.getName()).log(Level.SEVERE, null, ex);
         }
          
+    }
+    
+    private void getUsuario(String r_Usuario) {
+
+        try {
+            oDao = new DAO();
+            Usuario oUsuario;
+            oUsuario = oDao.getUserRegisted(r_Usuario);
+            if (oUsuario != null) {
+                txtCuentaH.setText(String.valueOf(oUsuario.getN_Cuenta()));
+                txtNombreH.setText(oUsuario.getNombre());
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(M_principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
 }

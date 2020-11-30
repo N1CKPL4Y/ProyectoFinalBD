@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import model.Rut;
 import model.Trabajador;
 
 /**
@@ -23,6 +24,8 @@ public class LoginTrabajador extends javax.swing.JFrame {
      */
     public LoginTrabajador() {
         initComponents();
+        
+        setTitle("Login Trabajador");
     }
 
     /**
@@ -39,28 +42,39 @@ public class LoginTrabajador extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         rutTra = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        claveTra = new javax.swing.JTextField();
         btnVolver = new javax.swing.JButton();
         btnIngresar = new javax.swing.JButton();
+        claveTra = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jPanel1.setBackground(new java.awt.Color(0, 204, 102));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-        jLabel1.setText("LOGIN");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 10, -1, -1));
+        jLabel1.setText("LOGIN TRABAJADOR");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 10, -1, -1));
 
         jLabel2.setText("Rut:");
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 50, -1, -1));
+
+        rutTra.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                rutTraKeyReleased(evt);
+            }
+        });
         jPanel1.add(rutTra, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 50, 160, -1));
 
         jLabel3.setText("Clave:");
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, -1, -1));
-        jPanel1.add(claveTra, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 90, 160, -1));
 
         btnVolver.setText("Volver");
-        jPanel1.add(btnVolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 150, -1, -1));
+        btnVolver.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVolverActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnVolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(256, 150, 70, -1));
 
         btnIngresar.setText("Ingresar");
         btnIngresar.addActionListener(new java.awt.event.ActionListener() {
@@ -68,13 +82,14 @@ public class LoginTrabajador extends javax.swing.JFrame {
                 btnIngresarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnIngresar, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 150, -1, -1));
+        jPanel1.add(btnIngresar, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 110, -1, -1));
+        jPanel1.add(claveTra, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 90, 160, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 344, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -107,6 +122,17 @@ public class LoginTrabajador extends javax.swing.JFrame {
             Logger.getLogger(LoginTrabajador.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnIngresarActionPerformed
+
+    private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
+        Login volver = new Login();
+        volver.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_btnVolverActionPerformed
+
+    private void rutTraKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_rutTraKeyReleased
+        Rut oRut = new Rut();
+        rutTra.setText(oRut.formatear(rutTra.getText()));
+    }//GEN-LAST:event_rutTraKeyReleased
 
     /**
      * @param args the command line arguments
@@ -146,7 +172,7 @@ public class LoginTrabajador extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnIngresar;
     private javax.swing.JButton btnVolver;
-    private javax.swing.JTextField claveTra;
+    private javax.swing.JPasswordField claveTra;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

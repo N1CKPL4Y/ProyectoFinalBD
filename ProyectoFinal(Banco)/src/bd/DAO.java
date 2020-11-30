@@ -8,6 +8,7 @@ package bd;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import model.Cuenta;
 import model.Motivo;
 import model.Movimiento;
 import model.Tipo_cuenta;
@@ -25,6 +26,7 @@ public class DAO {
     private List<Usuario> usuario;
     private List<Motivo> motivo;
     private List<Tipo_cuenta> t_cuenta;
+    private List<Cuenta> cuenta;
     
     public DAO() throws SQLException {
         oConexion = new Conexion(
@@ -89,8 +91,29 @@ public class DAO {
         }
     }
     
+    public List<Movimiento> mostrarMovimiento() throws SQLException {
+        movimientos = new ArrayList<>();
+        Movimiento oMovimiento;
+        sql = "SELECT * FROM movimiento  ORDER BY Id DESC";
+        oConexion.oResultSet = oConexion.ejecutarSelect(sql);
+        while (oConexion.oResultSet.next()) {
+            oMovimiento = new Movimiento();
+            oMovimiento.setId(oConexion.oResultSet.getInt(1));
+            oMovimiento.setDescripcion(oConexion.oResultSet.getString(2));
+            oMovimiento.setN_Cuenta_Ori(oConexion.oResultSet.getInt(3));
+            oMovimiento.setN_Cuenta_Des(oConexion.oResultSet.getInt(4));
+            oMovimiento.setFecha(oConexion.oResultSet.getDate(5));
+            oMovimiento.setHora(oConexion.oResultSet.getTime(6));
+            oMovimiento.setMonto(oConexion.oResultSet.getInt(7));
+            oMovimiento.setCuenta(oConexion.oResultSet.getInt(8));
+            movimientos.add(oMovimiento);
+        }
+        return movimientos;
+
+    }
+    
     public void solicitud(int ncuenta, String rutT, String descripcion, int motivo ) throws SQLException {
-        sql = "INSERT INTO solicitud VALUES(null,"+motivo+",'" + descripcion + "'," + ncuenta + ",'" + rutT + "')";
+        sql = "INSERT INTO solicitud VALUES(null,"+motivo+"," + ncuenta + ",'"+ rutT +"', CURDATE(), 1, '" + descripcion + "')";
         oConexion.ejecutar(sql);
     }
     
@@ -176,6 +199,63 @@ public class DAO {
         return null;
     }
     
+    public Cuenta get_debito(int n_cuenta) throws SQLException{        
+        Cuenta ocuenta;
+        sql = "SELECT * FROM CUENTA WHERE n_Cuenta = "+ n_cuenta+" AND tipo = 1;";
+        oConexion.oResultSet = oConexion.ejecutarSelect(sql);
+        if(oConexion.oResultSet.next()){
+            ocuenta = new Cuenta();
+            ocuenta.setId(oConexion.oResultSet.getInt(1));
+            ocuenta.setN_Cuenta(oConexion.oResultSet.getInt(2));
+            ocuenta.setTipo(oConexion.oResultSet.getInt(3));
+            ocuenta.setSaldo(oConexion.oResultSet.getInt(4));
+            ocuenta.setSaldo_C(oConexion.oResultSet.getInt(5));
+            ocuenta.setEstado(oConexion.oResultSet.getBoolean(6));
+            return ocuenta;
+        }else{
+            return null;
+        }
+        
+    }
+    
+    public Cuenta get_credito(int n_cuenta) throws SQLException{        
+        Cuenta ocuenta;
+        sql = "SELECT * FROM CUENTA WHERE n_Cuenta = "+ n_cuenta+" AND tipo = 2;";
+        oConexion.oResultSet = oConexion.ejecutarSelect(sql);
+        if(oConexion.oResultSet.next()){
+            ocuenta = new Cuenta();
+            ocuenta.setId(oConexion.oResultSet.getInt(1));
+            ocuenta.setN_Cuenta(oConexion.oResultSet.getInt(2));
+            ocuenta.setTipo(oConexion.oResultSet.getInt(3));
+            ocuenta.setSaldo(oConexion.oResultSet.getInt(4));
+            ocuenta.setSaldo_C(oConexion.oResultSet.getInt(5));
+            ocuenta.setEstado(oConexion.oResultSet.getBoolean(6));
+            return ocuenta;
+        }else{
+            return null;
+        }
+        
+    }
+    
+    public Cuenta get_ahorro(int n_cuenta) throws SQLException{        
+        Cuenta ocuenta;
+        sql = "SELECT * FROM CUENTA WHERE n_Cuenta = "+ n_cuenta+" AND tipo = 3;";
+        oConexion.oResultSet = oConexion.ejecutarSelect(sql);
+        if(oConexion.oResultSet.next()){
+            ocuenta = new Cuenta();
+            ocuenta.setId(oConexion.oResultSet.getInt(1));
+            ocuenta.setN_Cuenta(oConexion.oResultSet.getInt(2));
+            ocuenta.setTipo(oConexion.oResultSet.getInt(3));
+            ocuenta.setSaldo(oConexion.oResultSet.getInt(4));
+            ocuenta.setSaldo_C(oConexion.oResultSet.getInt(5));
+            ocuenta.setEstado(oConexion.oResultSet.getBoolean(6));
+            return ocuenta;
+        }else{
+            return null;
+        }
+        
+    }
+    
     
 
     public void transferencia(int _n_cuenta_ori, int _n_cuenta_des, int _monto, int t_c_ori, String msg, int t_c_des) throws SQLException {
@@ -186,25 +266,6 @@ public class DAO {
     public void cambiarClave(String claveString, int ncuenta) throws SQLException {
         sql = "UPDATE usuario SET Clave='" + claveString + "' WHERE N_Cuenta=" + ncuenta;
         oConexion.ejecutar(sql);
-    }
-
-    public List<Movimiento> mostrarMovimiento() throws SQLException {
-        movimientos = new ArrayList<>();
-        Movimiento oMovimiento;
-        sql = "SELECT * FROM movimiento  ORDER BY Id DESC";
-        oConexion.oResultSet = oConexion.ejecutarSelect(sql);
-        while (oConexion.oResultSet.next()) {
-            oMovimiento = new Movimiento();
-            oMovimiento.setId(oConexion.oResultSet.getInt(1));
-            oMovimiento.setDescripcion(oConexion.oResultSet.getString(2));
-            oMovimiento.setN_Cuenta_Ori(oConexion.oResultSet.getInt(3));
-            oMovimiento.setN_Cuenta_Des(oConexion.oResultSet.getInt(4));
-            oMovimiento.setFecha(oConexion.oResultSet.getDate(5));
-            oMovimiento.setMonto(oConexion.oResultSet.getInt(6));
-            movimientos.add(oMovimiento);
-        }
-        return movimientos;
-
     }
 
     public void crearUsuario(int b, String rut, String nombre, String apellido_P, String apellido_M, String clave) throws SQLException {

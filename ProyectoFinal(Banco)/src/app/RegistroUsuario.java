@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import model.Rut;
 
 /**
  *
@@ -22,6 +23,8 @@ public class RegistroUsuario extends javax.swing.JFrame {
      */
     public RegistroUsuario() {
         initComponents();
+        
+        setTitle("Registro de Usuario");
     }
 
     /**
@@ -45,28 +48,37 @@ public class RegistroUsuario extends javax.swing.JFrame {
         apellidoPNU = new javax.swing.JTextField();
         btnRegistrar = new javax.swing.JButton();
         btnVolver = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
 
         jTextField1.setText("jTextField1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jPanel1.setBackground(new java.awt.Color(0, 204, 102));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setText("Rut:");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, -1, -1));
-        jPanel1.add(apellidoMNU, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 140, 140, -1));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, -1, -1));
+        jPanel1.add(apellidoMNU, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 190, 140, -1));
 
         jLabel2.setText("Nombres:");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, -1, -1));
-        jPanel1.add(rutNU, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 20, 140, -1));
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, -1, -1));
+
+        rutNU.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                rutNUKeyReleased(evt);
+            }
+        });
+        jPanel1.add(rutNU, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 70, 140, -1));
 
         jLabel3.setText("Apellido Materno:");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 140, -1, -1));
-        jPanel1.add(nombresNU, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 60, 140, -1));
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 190, -1, -1));
+        jPanel1.add(nombresNU, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 110, 140, -1));
 
         jLabel4.setText("Apellido Paterno:");
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, -1, -1));
-        jPanel1.add(apellidoPNU, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 100, 140, -1));
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, -1, -1));
+        jPanel1.add(apellidoPNU, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 150, 140, -1));
 
         btnRegistrar.setText("Registrar");
         btnRegistrar.addActionListener(new java.awt.event.ActionListener() {
@@ -74,7 +86,7 @@ public class RegistroUsuario extends javax.swing.JFrame {
                 btnRegistrarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnRegistrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 180, -1, -1));
+        jPanel1.add(btnRegistrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 220, -1, -1));
 
         btnVolver.setText("Volver");
         btnVolver.addActionListener(new java.awt.event.ActionListener() {
@@ -82,17 +94,24 @@ public class RegistroUsuario extends javax.swing.JFrame {
                 btnVolverActionPerformed(evt);
             }
         });
-        jPanel1.add(btnVolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 240, -1, -1));
+        jPanel1.add(btnVolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 260, -1, -1));
+
+        jLabel5.setText("(con puntos y con guion)");
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 70, -1, -1));
+
+        jLabel6.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
+        jLabel6.setText("Registro de Usuario");
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 20, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 349, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 431, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 273, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 309, Short.MAX_VALUE)
         );
 
         pack();
@@ -124,6 +143,11 @@ public class RegistroUsuario extends javax.swing.JFrame {
         }
         
     }//GEN-LAST:event_btnRegistrarActionPerformed
+
+    private void rutNUKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_rutNUKeyReleased
+        Rut oRut = new Rut();
+        rutNU.setText(oRut.formatear(rutNU.getText()));
+    }//GEN-LAST:event_rutNUKeyReleased
 
     /**
      * @param args the command line arguments
@@ -169,6 +193,8 @@ public class RegistroUsuario extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField nombresNU;

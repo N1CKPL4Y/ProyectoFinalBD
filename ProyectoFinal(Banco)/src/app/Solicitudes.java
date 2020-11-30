@@ -12,6 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import model.Motivo;
+import model.Rut;
 import model.Usuario;
 
 /**
@@ -28,6 +29,8 @@ public class Solicitudes extends javax.swing.JFrame {
         rutIng = rutTrabajador;
         initComponents();
         cargarCbo();
+        
+        setTitle("Solicitudes");
     }
 
     private Solicitudes() {
@@ -67,10 +70,17 @@ public class Solicitudes extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jPanel1.setBackground(new java.awt.Color(0, 204, 102));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setText("Rut Usuario:");
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
+
+        rutU.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                rutUKeyReleased(evt);
+            }
+        });
         jPanel1.add(rutU, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 10, 150, -1));
 
         btnBuscar.setText("Buscar");
@@ -139,7 +149,7 @@ public class Solicitudes extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 348, Short.MAX_VALUE)
         );
 
         pack();
@@ -199,6 +209,11 @@ public class Solicitudes extends javax.swing.JFrame {
             Logger.getLogger(Solicitudes.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnEnviarActionPerformed
+
+    private void rutUKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_rutUKeyReleased
+        Rut oRut = new Rut();
+        rutU.setText(oRut.formatear(rutU.getText()));
+    }//GEN-LAST:event_rutUKeyReleased
 
     /**
      * @param args the command line arguments

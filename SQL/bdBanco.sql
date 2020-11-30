@@ -12,7 +12,6 @@ CREATE TABLE tipo_cuenta ( -- 3 insert (debito, credito, ahorro)
 
 CREATE TABLE motivo (
   id int(11) AUTO_INCREMENT,
-  nombre_m VARCHAR(50),
   detalle varchar(30),
 
   PRIMARY KEY(id)
@@ -92,19 +91,25 @@ INSERT INTO tipo_cuenta VALUES(NULL, 'Debito'); --ID 1
 INSERT INTO tipo_cuenta VALUES(NULL, 'Credito'); --ID 2
 INSERT INTO tipo_cuenta VALUES(NULL, 'Cuenta de ahorro'); --ID 3
 
+-- Tabla motivo
+INSERT INTO motivo VALUES(NULL, 'Activar cuenta');
+INSERT INTO motivo VALUES(NULL, 'Desactivar cuenta');
+
 -- Tabla Trabajador
 INSERT INTO Trabajador VALUES('15.738.857-6', 'Viviana', 'Droguett', 'Administracion', 'Servicio al cliente', 'viviana123');
 
 -- Tabla Usuario
---                           n_cuenta     rut          nombre    apellido_p   apellido_m   clave  activo
-INSERT INTO usuario VALUES(15116506, '15.116.506-0', 'Nicolas',    'Perez',  'Droguett', '1010',   1);
-INSERT INTO usuario VALUES(20660314,'20.660.314-3','Javier Alein','Villalobos','Ramirez','2020',   1);
+--                           n_cuenta           rut          nombre    apellido_p   apellido_m    clave  activo
+INSERT INTO usuario VALUES( 15116506, '15.116.506-0',     'Nicolas',     'Perez',  'Droguett',  '1010',      1);
+INSERT INTO usuario VALUES( 20660314, '20.660.314-3','Javier Alein','Villalobos',   'Ramirez',  '2020',      1);
 
 --Tabla Cuenta
 --                          ID    n_cuenta(fk)    t_cuenta(fk)        saldo   saldo(credito)        activo (1= si) (0=no)
+-- cuentas de Nicolas Perez Droguett
 INSERT INTO cuenta VALUES(  NULL,       15116506,              1,        50000,              0,                    1);
 INSERT INTO cuenta VALUES(  NULL,       15116506,              2,            0,        1000000,                    1);
 INSERT INTO cuenta VALUES(  NULL,       15116506,              3,        50000,              0,                    1);
+-- Cuentas de Javier Alein Villalobos Ramirez
 INSERT INTO cuenta VALUES(  NULL,       20660314,              1,        50000,              0,                    1);
 INSERT INTO cuenta VALUES(  NULL,       20660314,              2,            0,        1000000,                    1);
 INSERT INTO cuenta VALUES(  NULL,       20660314,              3,        50000,              0,                    1);
@@ -141,7 +146,7 @@ CREATE PROCEDURE crear_Cuentas
 BEGIN 
     INSERT INTO usuario VALUES(n_Cuenta,rut,nombre,apellido_P,apellido_M,clave,1);
     INSERT INTO cuenta VALUES(NULL,n_Cuenta,1,50000,0,1),
-      (NULL,n_Cuenta,2,0,1000000,1),
-    (NULL,n_Cuenta,3,50000,0,1);
+                             (NULL,n_Cuenta,2,0,1000000,1),
+                             (NULL,n_Cuenta,3,50000,0,1);
 END //
 DELIMITER ;
